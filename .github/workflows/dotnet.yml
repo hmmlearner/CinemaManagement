@@ -41,7 +41,7 @@ jobs:
       run: |
            cd CinemaManagement
            dir
-           dotnet ef migrations script --output ${{env.WORKING_DIRECTORY}}\sql-script.sql --idempotent --context DataContext --configuration Release --no-build
+           dotnet ef migrations script --output ${{env.WORKING_DIRECTORY}}\sql-script.sql --idempotent --context CinemaContext --configuration Release --no-build
     - name: listfiles
       run: dir ${{env.WORKING_DIRECTORY}}\CinemaManagement
       
