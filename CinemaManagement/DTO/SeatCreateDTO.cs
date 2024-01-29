@@ -8,7 +8,7 @@ namespace CinemaManagement.DTO
         //[Range(1, 3)]
         //public int Row { get; set; }
         [Required]
-        [Range(1, 10)]
-        public int SeatNumber { get; set; }
+
+        public string SeatRowNumber { get; set; }
     }
 }

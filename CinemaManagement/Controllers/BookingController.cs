@@ -194,6 +194,14 @@ namespace CinemaManagement.Controllers
 
         }
 
+        [HttpGet("GetUnavailableSeatsForShowTime/{showTimeId}")]
+        public async Task<ActionResult<IEnumerable<SeatDTO>>> GetUnavailableSeatsForShowTime(int showTimeId)
+        {
+            var unavaliableSeats =  await _bookingRepository.GetNonAvailableSeatsForShowTimeAsync(showTimeId);
+            var seatsDTO = _mapper.Map<List<SeatDTO>>(unavaliableSeats);
+            return Ok(seatsDTO);
+        }
+
         [HttpDelete("deleteOldBookings")]
         public async Task<IActionResult> DeleteOldBookings()
         {

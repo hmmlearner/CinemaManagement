@@ -4,6 +4,7 @@ using CinemaManagement.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 namespace CinemaManagement.Services
 {
@@ -14,7 +15,7 @@ namespace CinemaManagement.Services
         private IDbContextTransaction _transaction;
         public BookingRepository(CinemaContext cinemaContext)
         {
-            _cinemaContext = cinemaContext;
+            _cinemaContext = cinemaContext ?? throw new ArgumentNullException(nameof(cinemaContext));
         }
 
         public async Task<IDbContextTransaction> BeginTransaction()
@@ -65,10 +66,32 @@ namespace CinemaManagement.Services
             foreach(var seat in pickedSeats)
             {
                 seat.BookingId = bookingId;
+                var (seatRow, seatNumber) = GetSeatRowAndNumber(seat.SeatRowNumber);
+                seat.SeatNo = seatNumber;
+                seat.SeatRow = seatRow; 
                 _cinemaContext.Seats.Add(seat);
             }
 
         }
+
+        private (string, int) GetSeatRowAndNumber(string seatRow)
+        {
+            string charSeatRow;
+            int seatNumber;
+            Match match = Regex.Match(seatRow, @"([a-zA-Z]+)(\d+)");
+            if (match.Success)
+            {
+                // Extract character and number parts
+                charSeatRow = match.Groups[1].Value;
+                seatNumber = int.Parse(match.Groups[2].Value);
+            }
+            else
+            {
+                throw new ArgumentException("Invalid seat row format");
+            }
+            return (charSeatRow, seatNumber);
+        }
+
 
             public void UpdateBooking(Booking bookingToUpdate)
         {
@@ -119,6 +142,8 @@ namespace CinemaManagement.Services
         //    return seats;
         //}
 
+
+        //not needed for now
         public async Task<IEnumerable<Booking>> GetBookingsForShowTimeAsync(int showTimeId)
         {
             return await _cinemaContext.Bookings
@@ -126,24 +151,40 @@ namespace CinemaManagement.Services
                .Where(s => s.ShowtimeId == showTimeId).ToListAsync();
         }
 
-
-       /* public async Task<int> CalculateTotalReservedForShowTimeAsync(int showTimeId)
+        public async Task<IEnumerable<Seat>> GetNonAvailableSeatsForShowTimeAsync(int showTimeId)
         {
-            var totalReserved = await _cinemaContext.Bookings
+            var confirmedBookings = await _cinemaContext.Bookings
                 .Include(s => s.Showtime)
                 .Where(s => s.ShowtimeId == showTimeId && s.BookingConfirmed == true)
-                .SumAsync(b => b.NoOfSeats);
- 
-            return totalReserved;
-        }*/
+                .Select(b => b.Id)
+                .ToListAsync();
+
+            var nonAvailableSeats = await _cinemaContext.Seats
+                .Include(s => s.Booking)
+                .Where(s => confirmedBookings.Contains(s.BookingId))
+                .ToListAsync();
+
+            return nonAvailableSeats;
+        }
+
+
+        /* public async Task<int> CalculateTotalReservedForShowTimeAsync(int showTimeId)
+         {
+             var totalReserved = await _cinemaContext.Bookings
+                 .Include(s => s.Showtime)
+                 .Where(s => s.ShowtimeId == showTimeId && s.BookingConfirmed == true)
+                 .SumAsync(b => b.NoOfSeats);
+
+             return totalReserved;
+         }*/
 
         public async Task<bool> CheckIfSeatsAreAvailable(List<Seat> pickedSeats, int showTimeId)
         {
-            var pickedSeatNumbers = pickedSeats.Select(s => s.SeatNumber).Distinct();
+            var pickedSeatNumbers = pickedSeats.Select(s => s.SeatRowNumber).Distinct();
 
             var queryResult = await _cinemaContext.Seats
                 .Include(s => s.Booking)
-                .AnyAsync(s => s.Booking.ShowtimeId == showTimeId && pickedSeatNumbers.Contains(s.SeatNumber));
+                .AnyAsync(s => s.Booking.ShowtimeId == showTimeId && pickedSeatNumbers.Contains(s.SeatRowNumber));
 
             return !queryResult;
         }

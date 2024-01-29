@@ -62,6 +62,8 @@ namespace CinemaManagement.Controllers
 
         }
 
+        //TODO : NEED AN API TO LIST AVAILABLE SEATS/UNAVAILABLE SEATS FOR THE SHOWTIME
+
         private async Task<bool> CheckForConflictingShowTimes(ShowTime showTime)
         {
             var conflictingShowTimes = await _showTimeRepository.GetShowTimeByStartTimeAndDateAndTheater(showTime.StartTime, showTime.Date, showTime.TheaterId, showTime.Movie.Duration);

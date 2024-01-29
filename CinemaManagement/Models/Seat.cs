@@ -14,11 +14,16 @@ namespace CinemaManagement.Models
 
         // Add any additional properties for the seat record
         //[Required]
-        //[Range(1, 3)]
-        //public int Row { get; set; }
+        [Range(1, 10)]
+        public int SeatNo { get; set; }
+
+        [StringLength(5)]
+        public string SeatRow { get; set; }// char?
+
         [Required]
-        [Range(1, 20)]
-        public int SeatNumber { get; set; }
+        //[Range(1, 20)]
+        [StringLength(10)]
+        public string SeatRowNumber { get; set; }
         [Required]
         public bool IsAvailable { get; set; } = true;
         // Navigation property
