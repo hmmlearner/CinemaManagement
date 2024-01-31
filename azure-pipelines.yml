@@ -7,6 +7,7 @@ trigger:
 - main
 
 pool:
+  name: cinema-selfhosted
   vmImage: 'windows-latest'
 
 variables:
