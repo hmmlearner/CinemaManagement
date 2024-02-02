@@ -62,8 +62,8 @@ steps:
   inputs:
     command: 'custom'
     custom: 'ef'    
-    workingDirectory: '$(System.DefaultWorkingDirectory)/CinemaManagement/Data'  # Set the correct path to your project
-    arguments: 'migrations script --idempotent $(Build.SourcesDirectory)/CinemaManagement/Data --context CinemaContext --output $(System.ArtifactsDirectory)/script.sql'
+   # workingDirectory: '$(System.DefaultWorkingDirectory)/CinemaManagement/Data'  # Set the correct path to your project
+    arguments: 'migrations script --idempotent $(Build.SourcesDirectory)\CinemaManagement\Data --context CinemaContext --output $(System.ArtifactsDirectory)/script.sql'
  
 
 - task: VSTest@2
