@@ -58,7 +58,7 @@ steps:
   inputs:
     command: 'custom'
     custom: 'ef'
-    workingDirectory: dir
+    #workingDirectory: dir
     arguments: 'migrations script --idempotent --context CinemaContext --output $(System.ArtifactsDirectory)/script.sql'
  
 
