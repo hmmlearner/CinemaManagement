@@ -23,6 +23,11 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '7.x'  # Replace '7.x' with the desired version
+
 - task: DotNetCoreCLI@2  
   inputs:
     command: 'build'
