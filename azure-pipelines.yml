@@ -28,6 +28,11 @@ steps:
     packageType: 'sdk'
     version: '7.x'  # Replace '7.x' with the desired version
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
 - task: DotNetCoreCLI@2  
   inputs:
     command: 'build'
@@ -54,7 +59,7 @@ steps:
     command: 'custom'
     custom: 'ef'
     workingDirectory: dir
-    arguments: 'migrations script --idempotent ----context CinemaContext --output $(System.ArtifactsDirectory)/script.sql'
+    arguments: 'migrations script --idempotent --context CinemaContext --output $(System.ArtifactsDirectory)/script.sql'
  
 
 - task: VSTest@2
