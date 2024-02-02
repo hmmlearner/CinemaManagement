@@ -46,7 +46,7 @@ steps:
   inputs:
     command: 'custom'
     custom: 'tool'
-    arguments: 'install --global dotnet-ef'
+    arguments: 'install --global dotnet-ef --version 7.0.*'
  
 - task: DotNetCoreCLI@2
   displayName: 'Generate SQL Script'
