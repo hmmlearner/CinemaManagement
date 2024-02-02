@@ -16,17 +16,40 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@1
+  displayName: 'NuGet Installation'
 
 - task: NuGetCommand@2
+  displayName: 'NuGet Restore'
   inputs:
     restoreSolution: '$(solution)'
 
+- task: DotNetCoreCLI@2  
+  inputs:
+    command: 'build'
+    projects: 'CinemaManagement/CinemaManagement.csproj'
+
 - task: VSBuild@1
+  displayName: 'Build Project'
   inputs:
     solution: '$(solution)'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Install EF tool'
+  inputs:
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install --global dotnet-ef'
+ 
+- task: DotNetCoreCLI@2
+  displayName: 'Generate SQL Script'
+  inputs:
+    command: 'custom'
+    custom: 'ef'
+    arguments: 'migrations script --idempotent --project $(Build.SourcesDirectory)\Data.csproj --output $(System.ArtifactsDirectory)/script.sql'
+ 
 
 - task: VSTest@2
   inputs:
