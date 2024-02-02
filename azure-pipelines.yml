@@ -48,7 +48,8 @@ steps:
   inputs:
     command: 'custom'
     custom: 'ef'
-    arguments: 'migrations script --idempotent --project $(Build.SourcesDirectory)\Data.csproj --output $(System.ArtifactsDirectory)/script.sql'
+    workingDirectory: dir
+    arguments: 'migrations script --idempotent ----context CinemaContext --output $(System.ArtifactsDirectory)/script.sql'
  
 
 - task: VSTest@2
