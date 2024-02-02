@@ -53,9 +53,9 @@ steps:
     custom: 'tool'
     arguments: 'install --global dotnet-ef --version 7.0.*'
  
- - script: |
-            echo Current working directory: $(System.DefaultWorkingDirectory)
-          displayName: 'Print Current Working Directory'
+  - script: |
+        echo Current working directory: $(System.DefaultWorkingDirectory)
+    displayName: 'Print Current Working Directory'
 
 - task: DotNetCoreCLI@2
   displayName: 'Generate SQL Script'
