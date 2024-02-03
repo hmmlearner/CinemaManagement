@@ -55,12 +55,12 @@ steps:
  
 - script: |
     # Change the current working directory to a specific path
-    cd $(Build.SourcesDirectory)/CinemaManagement/Data
+    cd $(System.DefaultWorkingDirectory)/CinemaManagement/Data
     # List all files in the current directory
     ls
 
 - script: |
-    echo Current working directory: $(Build.SourcesDirectory)/CinemaManagement/Data
+    echo Current working directory: $(System.DefaultWorkingDirectory)/CinemaManagement/Data
   displayName: 'Print Current Working Directory'
 
 - task: DotNetCoreCLI@2
@@ -68,7 +68,7 @@ steps:
   inputs:
     command: 'custom'
     custom: 'ef'    
-   # workingDirectory: '$(System.DefaultWorkingDirectory)/CinemaManagement/Data'  # Set the correct path to your project
+    workingDirectory: '$(System.DefaultWorkingDirectory)/CinemaManagement/Data'  # Set the correct path to your project
     arguments: 'migrations script --idempotent --context CinemaContext --output $(System.ArtifactsDirectory)/script.sql'
  
 
