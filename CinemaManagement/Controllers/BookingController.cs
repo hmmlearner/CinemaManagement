@@ -163,6 +163,9 @@ namespace CinemaManagement.Controllers
                     var seats = booking.NoOfSeats;
                     await _showTimeRepository.UpdateShowTime(booking.ShowtimeId, seats);
                     await _showTimeRepository.SaveChangesAsync();
+
+                    //TODO: Also need to update IsAvailable to false in the seats table
+
                     
                     _bookingRepository.CommitTransaction();
                 }

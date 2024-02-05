@@ -29,7 +29,7 @@ namespace CinemaManagement.Interfaces
 
         //Task<int> CalculateTotalReservedForShowTimeAsync(int showTimeId);
         Task<IEnumerable<Seat>> GetSeatsForBookingAsync(int bookingId);
-
+         
         Task<IEnumerable<Seat>> GetNonAvailableSeatsForShowTimeAsync(int showTimeId);
         Task<Booking> GetBookingConfirmationAsync(int bookingId);
 
