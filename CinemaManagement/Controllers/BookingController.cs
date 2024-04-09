@@ -31,14 +31,13 @@ namespace CinemaManagement.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddBooking([FromBody] BookingCreateDTO bookingModel)
+        public async Task<IActionResult> AddBooking([FromBody] BookingCreateDto bookingModel)
         {
             if (bookingModel == null || bookingModel.Seats == null)
             {
                 return BadRequest("Invalid request body");
             }
             var booking = _mapper.Map<Booking>(bookingModel);
-
             var seats = _mapper.Map<List<Seat>>(bookingModel.Seats);
 
             //need to check if the seat is already booked. To make it simpler 1. Assumption that the seating is randomly assigned rather than user selecting the seat
@@ -57,14 +56,11 @@ namespace CinemaManagement.Controllers
                     _bookingRepository.AddBooking(booking);
                     // save the changes
                     await _bookingRepository.SaveChangesAsync();
-
                     _bookingRepository.AddSeatsToBooking(seats, booking.Id);
-
                     await _bookingRepository.SaveChangesAsync();
                     // Fetch the movie from the data store so the director is included
                     await _bookingRepository.GetBookingAsync(booking.Id);
                     _logger.LogInformation("Added new AddShowTime.");
-
                     _bookingRepository.CommitTransaction();
                 }
                 catch (Exception ex)
@@ -91,13 +87,13 @@ namespace CinemaManagement.Controllers
             //check if the showtime is valid and the theater is not full
             if (showTime == null || showTime.ReservedSeats >= showTime.Theater.TotalSeats)
             {
-                return (false, null); //BadRequest("Show is fully booked. Pick another Show");
+                return (false, null); 
             }
             // check if the seats are available
             var seatsAvailable = await _bookingRepository.CheckIfSeatsAreAvailable(seats, booking.ShowtimeId);
             if (!seatsAvailable)
             {
-                return (false, null);//BadRequest("Seats are not available. Please pick another seat");
+                return (false, null);
             }
             booking.TotalPrice = seats.Count * showTime.Movie.TicketPrice;
             // Return true and the updated booking if the booking is valid
@@ -106,7 +102,7 @@ namespace CinemaManagement.Controllers
 
 
         [HttpGet("getBooking/{bookingId}", Name = "GetBooking")]
-        public async Task<ActionResult<BookingDTO>> GetBooking(int bookingId)
+        public async Task<ActionResult<BookingDto>> GetBooking(int bookingId)
         {
             var booking = await _bookingRepository.GetBookingAsync(bookingId);
             var bookedSeats = await _bookingRepository.GetSeatsForBookingAsync(bookingId);
@@ -115,22 +111,12 @@ namespace CinemaManagement.Controllers
                 return NotFound();
             }
 
-            var seats = _mapper.Map<List<SeatDTO>>(bookedSeats);
-            var bookingDTO = _mapper.Map<BookingDTO>(booking);
+            var seats = _mapper.Map<List<SeatDto>>(bookedSeats);
+            var bookingDTO = _mapper.Map<BookingDto>(booking);
             bookingDTO.Seats = seats;
             return Ok(bookingDTO);
         }
 
-        //[HttpGet("GetBooking/{bookingId}", Name = "GetBooking")]
-        //public async Task<ActionResult<BookingDTO>> GetBookingInfo(int bookingId)
-        //{
-        //    var booking = await _bookingRepository.GetBookingInfoAsync(bookingId);
-        //    if (booking == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(_mapper.Map<BookingDTO>(booking));
-        //}
 
         [HttpPost("confirmBooking/{bookingId}")]
 
@@ -178,30 +164,29 @@ namespace CinemaManagement.Controllers
             }
             return Ok("Booking confirmed successfully");
             // i think we need to return AcceptedAtAction statuscode 202 but then a new resource is not really created?? so it fair to return 202?  
-            // return AcceptedAtAction("BookingConfirmation", new { id = bookingId }, null);
         }
 
         [HttpGet("BookingConfirmation/{bookingId}")]
-        public async Task<ActionResult<BookingConfirmationDTO>> BookingConfirmation(int bookingId)
+        public async Task<ActionResult<BookingConfirmationDto>> BookingConfirmation(int bookingId)
         {
             var booking = await _bookingRepository.GetBookingConfirmationAsync(bookingId);
             if (booking == null)
             {
                 return NotFound();
             }   
-            var bookingDTO = _mapper.Map<BookingConfirmationDTO>(booking);
+            var bookingDto = _mapper.Map<BookingConfirmationDto>(booking);
             var bookedSeats = await _bookingRepository.GetSeatsForBookingAsync(bookingId);
-            var seatsDTO = _mapper.Map<List<SeatDTO>>(bookedSeats);
-            bookingDTO.Seats = seatsDTO;
-            return Ok(bookingDTO);
+            var seatsDto = _mapper.Map<List<SeatDto>>(bookedSeats);
+            bookingDto.Seats = seatsDto;
+            return Ok(bookingDto);
 
         }
 
         [HttpGet("GetUnavailableSeatsForShowTime/{showTimeId}")]
-        public async Task<ActionResult<IEnumerable<SeatDTO>>> GetUnavailableSeatsForShowTime(int showTimeId)
+        public async Task<ActionResult<IEnumerable<SeatDto>>> GetUnavailableSeatsForShowTime(int showTimeId)
         {
             var unavaliableSeats =  await _bookingRepository.GetNonAvailableSeatsForShowTimeAsync(showTimeId);
-            var seatsDTO = _mapper.Map<List<SeatDTO>>(unavaliableSeats);
+            var seatsDTO = _mapper.Map<List<SeatDto>>(unavaliableSeats);
             return Ok(seatsDTO);
         }
 

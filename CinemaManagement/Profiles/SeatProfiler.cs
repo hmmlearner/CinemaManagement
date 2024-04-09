@@ -8,9 +8,9 @@ namespace CinemaManagement.Profiles
     {
         public SeatProfiler()
         {
-            CreateMap<Seat, SeatCreateDTO>();
-            CreateMap<SeatCreateDTO, Seat>();
-            CreateMap<Seat, SeatDTO>();
+            CreateMap<Seat, SeatCreateDto>();
+            CreateMap<SeatCreateDto, Seat>();
+            CreateMap<Seat, SeatDto>();
         }
     }
 }

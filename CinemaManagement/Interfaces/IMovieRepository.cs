@@ -9,8 +9,6 @@ namespace CinemaManagement.Interfaces
         Task<Movie?> GetMovieByName(string movieName);
         Task<IEnumerable<Movie>> GetMoviesAsync();
 
-       // IAsyncEnumerable<Movie> GetMoviesAsAsyncEnumerable();
-
         void UpdateMovie(Movie movieToUpdate);
 
         void AddMovie(Movie movieToAdd);

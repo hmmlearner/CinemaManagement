@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CinemaManagement.DTO
 {
-    public class BookingConfirmationDTO
+    public class BookingConfirmationDto
     {
         public string MovieTitle { get; set; }
 
@@ -15,7 +15,7 @@ namespace CinemaManagement.DTO
         public bool BookingConfirmed { get; set; } = false;
         public double TotalPrice { get; set; }
 
-        public List<SeatDTO> Seats { get; set; }
+        public List<SeatDto> Seats { get; set; }
 
         public string UserName { get; set; }
         public string Email { get; set; }

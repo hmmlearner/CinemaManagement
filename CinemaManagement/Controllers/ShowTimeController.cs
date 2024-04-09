@@ -25,7 +25,7 @@ namespace CinemaManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddShowTime([FromBody] ShowTimeCreateDTO showTimeModel)
+        public async Task<IActionResult> AddShowTime([FromBody] ShowTimeCreateDto showTimeModel)
         {
             if (showTimeModel == null)
             {
@@ -56,7 +56,7 @@ namespace CinemaManagement.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while adding the movie.");
+                return StatusCode(500, "An error occurred while adding the movie. "+ ex.Message);
 
             }
 
@@ -74,7 +74,7 @@ namespace CinemaManagement.Controllers
 
         //[Route("GetShowTime")]
         [HttpGet("getShowTime/{showTimeId}", Name = "GetShowTime")]
-        public async Task<ActionResult<ShowTimeDTO>> GetShowTime(int showTimeId)
+        public async Task<ActionResult<ShowTimeDto>> GetShowTime(int showTimeId)
         {
             var showTime = await _showTimeRepository.GetShowTimeAsync(showTimeId);
             if (showTime == null)
@@ -82,31 +82,31 @@ namespace CinemaManagement.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<ShowTimeDTO>(showTime));
+            return Ok(_mapper.Map<ShowTimeDto>(showTime));
         }
 
         //[Route("GetShowTimesByMovie")]
         [HttpGet("getShowTimesByMovie/{movieName}", Name = "GetShowTimesByMovie")]
-        public async Task<ActionResult<IEnumerable<ShowTimeDTO>>> GetShowTimesByMovie(string movieName)
+        public async Task<ActionResult<IEnumerable<ShowTimeDto>>> GetShowTimesByMovie(string movieName)
         {
             var showTimes = await _showTimeRepository.GetShowTimesByMovieAsync(movieName);
             if (showTimes == null)
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<IEnumerable<ShowTimeDTO>>(showTimes));
+            return Ok(_mapper.Map<IEnumerable<ShowTimeDto>>(showTimes));
 
         }
 
         [HttpGet("getShowTimesByMovieID/{movieId}", Name = "getShowTimesByMovieID")]
-        public async Task<ActionResult<IEnumerable<ShowTimeDTO>>> GetShowTimesByMovieID(int movieId)
+        public async Task<ActionResult<IEnumerable<ShowTimeDto>>> GetShowTimesByMovieID(int movieId)
         {
             var showTimes = await _showTimeRepository.GetShowTimesByMovieAsync(movieId);
             if (showTimes == null)
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<IEnumerable<ShowTimeDTO>>(showTimes));
+            return Ok(_mapper.Map<IEnumerable<ShowTimeDto>>(showTimes));
         }
 
         // update showtime -- update or delete is suffice
@@ -129,7 +129,7 @@ namespace CinemaManagement.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while deleting ShowTime.");
+                return StatusCode(500, "An error occurred while deleting ShowTime. " + ex.Message);
 
             }
         }

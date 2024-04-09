@@ -23,8 +23,6 @@ namespace CinemaManagement.Models
         public DateTime CreatedDateTime { get; set; }
         public DateTime? ConfirmedDateTime { get; set; }
 
-        //[Required]
-        //public string SeatNumbers { get; set; }
 
         //TODO: May be add seat selection here? or in a separate table? so that we can show the user which seats are available and which are not
 

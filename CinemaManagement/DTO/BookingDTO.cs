@@ -2,7 +2,7 @@
 
 namespace CinemaManagement.DTO
 {
-    public class BookingDTO
+    public class BookingDto
     {
         public int Id { get; set; } // Primary key (you can adjust it based on your needs)
         public int ShowtimeId { get; set; } // Foreign key to Showtime
@@ -11,12 +11,10 @@ namespace CinemaManagement.DTO
         public double TotalPrice { get; set; }
         public bool BookingConfirmed { get; set; }
         public DateTime CreatedDateTime { get; set; }
-        //public DateTime? ConfirmedDateTime { get; set; }
 
         // Navigation properties
         public ShowTime Showtime { get; set; } // Navigation property to Showtime
-        //public User User { get; set; } // Navigation property to User
 
-        public List<SeatDTO> Seats { get; set; }
+        public List<SeatDto> Seats { get; set; }
     }
 }

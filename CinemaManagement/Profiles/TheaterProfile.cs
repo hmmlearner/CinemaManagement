@@ -8,9 +8,9 @@ namespace CinemaManagement.Profiles
     {
         public TheaterProfile()
         {
-            CreateMap<Theater, TheaterCreateDTO>();
-            CreateMap<TheaterCreateDTO, Theater>();
-            CreateMap<Theater, TheaterDTO>(); 
+            CreateMap<Theater, TheaterCreateDto>();
+            CreateMap<TheaterCreateDto, Theater>();
+            CreateMap<Theater, TheaterDto>(); 
         }
 
     }

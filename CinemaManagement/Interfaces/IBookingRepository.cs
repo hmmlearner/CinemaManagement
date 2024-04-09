@@ -12,8 +12,6 @@ namespace CinemaManagement.Interfaces
 
         Task<IEnumerable<Booking>> GetBookingsForShowTimeAsync(int showTimeId);
 
-        // IAsyncEnumerable<Movie> GetMoviesAsAsyncEnumerable();
-
         Task<bool> CheckIfSeatsAreAvailable(List<Seat> pickedSeats, int showTimeId);
 
         void AddSeatsToBooking(List<Seat> pickedSeats, int bookingId);
@@ -27,7 +25,6 @@ namespace CinemaManagement.Interfaces
 
         Task<bool> SaveChangesAsync();
 
-        //Task<int> CalculateTotalReservedForShowTimeAsync(int showTimeId);
         Task<IEnumerable<Seat>> GetSeatsForBookingAsync(int bookingId);
          
         Task<IEnumerable<Seat>> GetNonAvailableSeatsForShowTimeAsync(int showTimeId);

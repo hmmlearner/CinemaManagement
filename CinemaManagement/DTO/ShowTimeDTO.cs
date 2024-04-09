@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CinemaManagement.DTO
 {
-    public class ShowTimeDTO
+    public class ShowTimeDto
     {
         public int Id { get; set; } // Primary key (you can adjust it based on your needs)
         public DateTime StartTime { get; set; }
@@ -22,8 +22,6 @@ namespace CinemaManagement.DTO
 
         public int TotalSeats { get; set; }
 
-        // Navigation properties
-        //public Movie Movie { get; set; } // Navigation property to Movie
-        //public Theater Theater { get; set; } // Navigation property to Theater
+
     }
 }

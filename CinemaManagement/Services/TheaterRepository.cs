@@ -22,14 +22,14 @@ namespace CinemaManagement.Services
             _cinemaContext.Add(theater);
         }
 
-        public void DeleteTheater(Theater theaterToRemove)
+        public void DeleteTheater(Theater theater)
         {
-            if (theaterToRemove == null)
+            if (theater == null)
             {
-                throw new ArgumentNullException(nameof(theaterToRemove));
+                throw new ArgumentNullException(nameof(theater));
             }
 
-            _cinemaContext.Remove(theaterToRemove);
+            _cinemaContext.Remove(theater);
         }
         public async Task<IEnumerable<Theater>> GetTheatersAsync()
         {

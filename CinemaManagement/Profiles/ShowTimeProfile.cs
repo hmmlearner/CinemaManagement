@@ -8,9 +8,9 @@ namespace CinemaManagement.Profiles
     {
         public ShowTimeProfile()
         {
-            CreateMap<ShowTime, ShowTimeCreateDTO>();
-            CreateMap<ShowTimeCreateDTO, ShowTime>();
-            CreateMap<ShowTime, ShowTimeDTO>()
+            CreateMap<ShowTime, ShowTimeCreateDto>();
+            CreateMap<ShowTimeCreateDto, ShowTime>();
+            CreateMap<ShowTime, ShowTimeDto>()
                 .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Movie.Title))  
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Movie.Duration))
                 .ForMember(dest => dest.Genre, opt => opt.MapFrom(src => src.Movie.Genre))

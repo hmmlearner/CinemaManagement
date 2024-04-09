@@ -32,14 +32,14 @@ namespace CinemaManagement.Services
             _cinemaContext.Movies.Update(movieToUpdate);
         }
 
-        public void DeleteMovie(Movie movieToRemove)
+        public void DeleteMovie(Movie movieToDelete)
         {
-              if (movieToRemove == null)
+              if (movieToDelete == null)
             {
-                throw new ArgumentNullException(nameof(movieToRemove));
+                throw new ArgumentNullException(nameof(movieToDelete));
             }
 
-            _cinemaContext.Remove(movieToRemove);
+            _cinemaContext.Remove(movieToDelete);
         }
 
         public async Task<Movie?> GetMovieAsync(int movieId)

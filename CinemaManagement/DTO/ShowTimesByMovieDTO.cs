@@ -2,7 +2,7 @@
 {
 
     //THIS IS NOT REQUIRED FOR THE EXERCISE
-    public class ShowTimesByMovieDTO
+    public class ShowTimesByMovieDto
     {
 
         public int Id { get; set; } // Primary key (you can adjust it based on your needs)

@@ -24,7 +24,7 @@ namespace CinemaManagement.Controllers
             _mapper = mapper;
         }
         [HttpPost]
-        public async Task<IActionResult> AddTheater([FromBody] TheaterCreateDTO theaterModel)
+        public async Task<IActionResult> AddTheater([FromBody] TheaterCreateDto theaterModel)
         {
             if (theaterModel == null)
             {
@@ -52,21 +52,21 @@ namespace CinemaManagement.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while adding the theater.");
+                return StatusCode(500, "An error occurred while adding the theater. "+ ex.Message);
             }
 
         }
 
         [HttpGet(Name = "getTheaters")]
-        public async Task<ActionResult<IEnumerable<TheaterDTO>>> GetTheaters()
+        public async Task<ActionResult<IEnumerable<TheaterDto>>> GetTheaters()
         {
             var theaters = await _theaterRepository.GetTheatersAsync();
-            return Ok(_mapper.Map<IEnumerable<TheaterDTO>>(theaters));
+            return Ok(_mapper.Map<IEnumerable<TheaterDto>>(theaters));
         }
 
 
         [HttpGet("{theaterId}", Name = "getTheater")]
-        public async Task<ActionResult<TheaterDTO>> GetTheater(int theaterId)
+        public async Task<ActionResult<TheaterDto>> GetTheater(int theaterId)
         {
             var theater = await _theaterRepository.GetTheaterById(theaterId);
             if (theater == null)
@@ -74,7 +74,7 @@ namespace CinemaManagement.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<TheaterDTO>(theater));
+            return Ok(_mapper.Map<TheaterDto>(theater));
         }
 
         [HttpDelete("delete/{theaterId}")]
@@ -94,7 +94,7 @@ namespace CinemaManagement.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while deleting the theater.");
+                return StatusCode(500, "An error occurred while deleting the theater. " + ex.Message);
             }
         }
     }

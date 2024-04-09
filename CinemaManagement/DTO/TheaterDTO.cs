@@ -2,7 +2,7 @@
 
 namespace CinemaManagement.DTO
 {
-    public class TheaterDTO
+    public class TheaterDto
     {
         public int Id { get; set; } 
         public string Name { get; set; }

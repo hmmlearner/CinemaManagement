@@ -132,16 +132,6 @@ namespace CinemaManagement.Services
             return seats;
         }
 
-        // top one or below one?
-
-        //public async Task<IEnumerable<Seat>> GetBookingInfoAsync(int bookingId)
-        //{
-        //    var seats = await _cinemaContext.Seats
-        //            .Include(s => s.Booking)
-        //            .Where(s => s.BookingId == bookingId).ToListAsync();
-        //    return seats;
-        //}
-
 
         //not needed for now
         public async Task<IEnumerable<Booking>> GetBookingsForShowTimeAsync(int showTimeId)
@@ -155,7 +145,7 @@ namespace CinemaManagement.Services
         {
             var confirmedBookings = await _cinemaContext.Bookings
                 .Include(s => s.Showtime)
-                .Where(s => s.ShowtimeId == showTimeId && s.BookingConfirmed == true)
+                .Where(s => s.ShowtimeId == showTimeId && s.BookingConfirmed)
                 .Select(b => b.Id)
                 .ToListAsync();
 
@@ -167,16 +157,6 @@ namespace CinemaManagement.Services
             return nonAvailableSeats;
         }
 
-
-        /* public async Task<int> CalculateTotalReservedForShowTimeAsync(int showTimeId)
-         {
-             var totalReserved = await _cinemaContext.Bookings
-                 .Include(s => s.Showtime)
-                 .Where(s => s.ShowtimeId == showTimeId && s.BookingConfirmed == true)
-                 .SumAsync(b => b.NoOfSeats);
-
-             return totalReserved;
-         }*/
 
         public async Task<bool> CheckIfSeatsAreAvailable(List<Seat> pickedSeats, int showTimeId)
         {

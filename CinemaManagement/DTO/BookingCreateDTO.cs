@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CinemaManagement.DTO
 {
-    public class BookingCreateDTO
+    public class BookingCreateDto
     {
         [Required]
         public int ShowtimeId { get; set; } // Foreign key to Showtime
@@ -11,15 +11,11 @@ namespace CinemaManagement.DTO
         [Required]
         [Range(1, 20)]
         public int NoOfSeats { get; set; }
-        //public double TotalPrice { get; set; }
         [Required]
         public bool BookingConfirmed { get; set; } = false;
         [Required]
         public DateTime CreatedDateTime { get; set; }
-        public List<SeatCreateDTO> Seats { get; set; }
-        //public DateTime? ConfirmedDateTime { get; set; }
+        public List<SeatCreateDto> Seats { get; set; }
 
-        // Navigation properties
-        //public ShowTime Showtime { get; set; } // Navigation property to Showtime
     }
 }

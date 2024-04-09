@@ -2,7 +2,7 @@
 
 namespace CinemaManagement.DTO
 {
-    public class MovieCreateDTO
+    public class MovieCreateDto
     {
         [Required]
         [MaxLength(200)]

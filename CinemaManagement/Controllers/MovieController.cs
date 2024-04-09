@@ -24,7 +24,7 @@ namespace CinemaManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddMovie([FromBody] MovieCreateDTO movieModel)
+        public async Task<IActionResult> AddMovie([FromBody] MovieCreateDto movieModel)
         {
             if (movieModel == null)
             {
@@ -50,13 +50,13 @@ namespace CinemaManagement.Controllers
                 // Fetch the movie from the data store so the director is included
                 await _movieRepository.GetMovieAsync(movie.Id);
 
-                return CreatedAtRoute("GetMovie",
+                return CreatedAtRoute(nameof(GetMovie),
                     new { movieId = movie.Id },
                     _mapper.Map<Movie>(movie));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while adding the movie.");
+                return StatusCode(500, "An error occurred while adding the movie. " + ex.Message);
 
             }
 
@@ -64,15 +64,15 @@ namespace CinemaManagement.Controllers
         }
 
         [HttpGet(Name = "getMovies")]
-        public async Task<ActionResult<IEnumerable<MovieDTO>>> GetMovies()
+        public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies()
         {
             var movieEntities = await _movieRepository.GetMoviesAsync();
-            return Ok(_mapper.Map<IEnumerable<MovieDTO>>(movieEntities));
+            return Ok(_mapper.Map<IEnumerable<MovieDto>>(movieEntities));
         }
 
 
         [HttpGet("{movieId}", Name = "getMovie")]
-        public async Task<ActionResult<MovieDTO>> GetMovie(int movieId)
+        public async Task<ActionResult<MovieDto>> GetMovie(int movieId)
         {
             var movie = await _movieRepository.GetMovieAsync(movieId);
             if (movie == null)
@@ -80,13 +80,13 @@ namespace CinemaManagement.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<MovieDTO>(movie));
+            return Ok(_mapper.Map<MovieDto>(movie));
         }
 
 
            //update Movie using HTTPput API for UpdateMovie([FromBody] model)
            [HttpPut("update/{movieId}")]
-           public async Task<ActionResult<MovieDTO>> UpdateMovie(int movieId, [FromBody] MovieUpdateDTO movieModel)
+           public async Task<ActionResult<MovieDto>> UpdateMovie(int movieId, [FromBody] MovieUpdateDto movieModel)
            {               
                // Find the movie with the specified ID
                var existingMovie = await _movieRepository.GetMovieAsync(movieId);
@@ -103,11 +103,11 @@ namespace CinemaManagement.Controllers
                 await _movieRepository.SaveChangesAsync();
 
                 // For demonstration purposes, let's just return the updated movie
-                return Ok(_mapper.Map<MovieDTO>(existingMovie));
+                return Ok(_mapper.Map<MovieDto>(existingMovie));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while adding the movie.");
+                return StatusCode(500, "An error occurred while adding the movie. " + ex.Message);
 
             }
         } 

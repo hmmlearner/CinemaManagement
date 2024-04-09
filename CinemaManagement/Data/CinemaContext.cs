@@ -18,5 +18,6 @@ namespace CinemaManagement.Data
 
         public DbSet<Seat> Seats { get; set; }
 
-    }
+
+        }
 }

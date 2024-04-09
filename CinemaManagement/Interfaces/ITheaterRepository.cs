@@ -4,7 +4,6 @@ namespace CinemaManagement.Interfaces
 {
     public interface ITheaterRepository
     {
-        //Task<IEnumerable<Theater>> GetAllTheatersAsync();
         Task<IEnumerable<Theater>> GetTheatersAsync();
         Task<Theater?> GetTheaterById(int theaterId);
         Task<Theater?> GetTheaterByName(string theaterName);

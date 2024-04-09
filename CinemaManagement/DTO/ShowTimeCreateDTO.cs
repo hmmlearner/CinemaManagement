@@ -2,7 +2,7 @@
 
 namespace CinemaManagement.DTO
 {
-    public class ShowTimeCreateDTO
+    public class ShowTimeCreateDto
     {
         [Required]
         public DateTime StartTime { get; set; }

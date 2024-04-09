@@ -1,6 +1,6 @@
 ﻿namespace CinemaManagement.DTO
 {
-    public class MovieUpdateDTO
+    public class MovieUpdateDto
     {
         public string Title { get; set; }
         public string Description { get; set; }
