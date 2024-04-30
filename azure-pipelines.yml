@@ -1,0 +1,78 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+  displayName: 'NuGet Installation'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet Restore'
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '7.x'  # Replace '7.x' with the desired version
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2  
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+
+- task: VSBuild@1
+  displayName: 'Build Project'
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Install EF tool'
+  inputs:
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install --global dotnet-ef --version 7.0.*'
+ 
+- script: |
+    # Change the current working directory to a specific path. List all files in the current directory
+    cd $(System.DefaultWorkingDirectory)/CinemaManagement
+    ls
+  displayName: 'List files under working directory'
+
+- script: |
+    echo Current working directory: $(System.DefaultWorkingDirectory)/CinemaManagement
+  displayName: 'Print Current Working Directory'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Generate SQL Script'
+  inputs:
+    command: 'custom'
+    custom: 'ef'    
+    workingDirectory: '$(System.DefaultWorkingDirectory)/CinemaManagement'  # Set the correct path to your project
+    arguments: 'migrations script --idempotent --context CinemaContext --output $(System.ArtifactsDirectory)/script.sql'
+ 
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
