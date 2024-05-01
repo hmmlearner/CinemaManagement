@@ -28,13 +28,6 @@ namespace CinemaManagement.Test.Fixtures
                     new Booking { Id = 4, ShowtimeId = 1, UserId = 1, NoOfSeats = 2, TotalPrice = 40.0, BookingConfirmed = false, CreatedDateTime = DateTime.Now.AddMinutes(-30) },
             };
 
-            //MockRepository.Setup(repo => repo.GetShowTimesByMovieAsync(It.IsAny<int>()))
-            //          .ReturnsAsync((int movieId) => ShowTimes.Where(st => st.MovieId == movieId));
-            //MockRepository.Setup(repo => repo.GetShowTimeAsync(It.IsAny<int>()))
-            //        .ReturnsAsync((int id) => ShowTimes.FirstOrDefault(o => o.Id == id));
-            //MockRepository.Setup(m => m.GetShowTimesByMovieAsync(It.IsAny<int>()))
-            //        .ReturnsAsync((int movieId) => ShowTimes.Where(o => o.MovieId == movieId));
-
         }
     }
 }

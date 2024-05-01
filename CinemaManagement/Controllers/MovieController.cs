@@ -64,7 +64,9 @@ namespace CinemaManagement.Controllers
         }
 
         [HttpGet(Name = "getMovies")]
-        public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies()
+
+        //public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies()
+        public async Task<IActionResult> GetMovies()
         {
             var movieEntities = await _movieRepository.GetMoviesAsync();
             return Ok(_mapper.Map<IEnumerable<MovieDto>>(movieEntities));
@@ -72,7 +74,8 @@ namespace CinemaManagement.Controllers
 
 
         [HttpGet("{movieId}", Name = "getMovie")]
-        public async Task<ActionResult<MovieDto>> GetMovie(int movieId)
+        //public async Task<ActionResult<MovieDto>> GetMovie(int movieId)
+        public async Task<IActionResult> GetMovie(int movieId)
         {
             var movie = await _movieRepository.GetMovieAsync(movieId);
             if (movie == null)
@@ -86,8 +89,9 @@ namespace CinemaManagement.Controllers
 
            //update Movie using HTTPput API for UpdateMovie([FromBody] model)
            [HttpPut("update/{movieId}")]
-           public async Task<ActionResult<MovieDto>> UpdateMovie(int movieId, [FromBody] MovieUpdateDto movieModel)
-           {               
+        //public async Task<ActionResult<MovieDto>> UpdateMovie(int movieId, [FromBody] MovieUpdateDto movieModel)
+        public async Task<IActionResult> UpdateMovie(int movieId, [FromBody] MovieUpdateDto movieModel)
+        {               
                // Find the movie with the specified ID
                var existingMovie = await _movieRepository.GetMovieAsync(movieId);
 

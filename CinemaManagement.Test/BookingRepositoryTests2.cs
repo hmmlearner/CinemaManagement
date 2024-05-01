@@ -38,8 +38,6 @@ namespace CinemaManagement.Test
 
             }
 
-        //void AddSeatsToBooking(List<Seat> pickedSeats, int bookingId);
-
             [Fact]
             public void AddSeatsBooking_ShouldAddSeatsToBookingToRepository()
             {
@@ -61,8 +59,6 @@ namespace CinemaManagement.Test
             {
                 // Arrange
                 var bookingId = 1;
-            //var mockRepository = new Mock<IBookingRepository>();
-            //var expectedBooking = new Booking { Id = bookingId, ShowtimeId = 1, UserId = 1, NoOfSeats = 2, TotalPrice = 20.0, BookingConfirmed = true, CreatedDateTime = DateTime.Now };
                 var expectedBooking = _fixture.Bookings.FirstOrDefault(st => st.Id == bookingId);
                 _fixture.MockRepository.Setup(repo => repo.GetBookingAsync(bookingId)).ReturnsAsync(expectedBooking);
 
@@ -114,7 +110,6 @@ namespace CinemaManagement.Test
         // Id = 3, ShowtimeId = 1, UserId = 3, NoOfSeats = 2, TotalPrice = 20.0, BookingConfirmed = true, CreatedDateTime = DateTime.Now
         public async Task DeleteOldBookings_ShouldReturnTrue_WhenDeletionSuccessful(int id, int showtimeId, int userId, int noOfSeats,int totalPrice, bool bookingConfirmed,DateTime createdDateTimeStr)
         {
-            //var createdDateTime = DateTime.Parse(createdDateTimeStr);
             // Arrange
             var bookings = new List<Booking>
             {
