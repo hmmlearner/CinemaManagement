@@ -1,4 +1,4 @@
-# EcommerceReact 
+# Cinema Management
 
 This is Movie booking application with APIs built on .NET 7 and SQLExpress for DB. Front end hasn't been created yet.
 
