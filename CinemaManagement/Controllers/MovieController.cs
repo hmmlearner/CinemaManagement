@@ -8,6 +8,9 @@ using CinemaManagement.Filters;
 
 namespace CinemaManagement.Controllers
 {
+    /// <summary>
+    /// Movie controller for handling movie related operations
+    /// </summary>
     [ServiceFilter(typeof(ModelStateValidationFilter))]
     [Route("api/movies")]
     public class MovieController : ControllerBase
@@ -16,6 +19,12 @@ namespace CinemaManagement.Controllers
         private readonly IMovieRepository _movieRepository;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MovieController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger instance used for logging.</param>
+        /// <param name="movieRepository">The repository for accessing movie data.</param>
+        /// <param name="mapper">The mapper instance used for object mapping.</param>
         public MovieController(ILogger<Movie> logger, IMovieRepository movieRepository, IMapper mapper)
         {
             _logger = logger;
@@ -23,6 +32,11 @@ namespace CinemaManagement.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Add a new movie to the data store
+        /// </summary>
+        /// <param name="movieModel">movie details</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> AddMovie([FromBody] MovieCreateDto movieModel)
         {
@@ -63,9 +77,11 @@ namespace CinemaManagement.Controllers
 
         }
 
+        /// <summary>
+        /// Get all movies from the data store
+        /// </summary>
+        /// <returns>Http 200 OK with list of movies</returns>
         [HttpGet(Name = "getMovies")]
-
-        //public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies()
         public async Task<IActionResult> GetMovies()
         {
             var movieEntities = await _movieRepository.GetMoviesAsync();
@@ -73,8 +89,12 @@ namespace CinemaManagement.Controllers
         }
 
 
+        /// <summary>
+        /// Get a movie by ID
+        /// </summary>
+        /// <param name="movieId">movieId of type int</param>
+        /// <returns>Http 200 OK with movie details</returns>
         [HttpGet("{movieId}", Name = "getMovie")]
-        //public async Task<ActionResult<MovieDto>> GetMovie(int movieId)
         public async Task<IActionResult> GetMovie(int movieId)
         {
             var movie = await _movieRepository.GetMovieAsync(movieId);
@@ -87,13 +107,17 @@ namespace CinemaManagement.Controllers
         }
 
 
-           //update Movie using HTTPput API for UpdateMovie([FromBody] model)
-           [HttpPut("update/{movieId}")]
-        //public async Task<ActionResult<MovieDto>> UpdateMovie(int movieId, [FromBody] MovieUpdateDto movieModel)
+        /// <summary>
+        /// Update the movie
+        /// </summary>
+        /// <param name="movieId">movieId of type int</param>
+        /// <param name="movieModel">Updated details of movieModel</param>
+        /// <returns>Http 200 Ok with updated movie details</returns>        
+        [HttpPut("update/{movieId}")]
         public async Task<IActionResult> UpdateMovie(int movieId, [FromBody] MovieUpdateDto movieModel)
-        {               
-               // Find the movie with the specified ID
-               var existingMovie = await _movieRepository.GetMovieAsync(movieId);
+        {
+            // Find the movie with the specified ID
+            var existingMovie = await _movieRepository.GetMovieAsync(movieId);
 
             if (existingMovie == null)
                {
@@ -117,6 +141,11 @@ namespace CinemaManagement.Controllers
         } 
 
         //Delete Movie using HTTPDelete API for DeleteMovie(int movieId)
+        /// <summary>
+        /// Delete a movie from the data store
+        /// </summary>
+        /// <param name="movieId">movieId of type int</param>
+        /// <returns>Http 204 NoContent</returns>
         [HttpDelete("delete/{movieId}")]
         public async Task<IActionResult> DeleteMovie(int movieId)
         {

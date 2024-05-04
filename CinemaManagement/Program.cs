@@ -3,6 +3,8 @@ using CinemaManagement.Data;
 using CinemaManagement.Filters;
 using CinemaManagement.Interfaces;
 using CinemaManagement.Services;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,8 +28,21 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<ModelStateValidationFilter>();
 });
 
+builder.Services.AddEndpointsApiExplorer();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "API",
+        Version = "v1",
+        Description = "Cinema Booking System APIs",
+
+    });
+
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
+    $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+});
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 

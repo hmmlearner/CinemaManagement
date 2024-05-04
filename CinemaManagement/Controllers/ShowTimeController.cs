@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaManagement.Controllers
 {
+    /// <summary>
+    /// Controller for managing show times in the cinema management system.
+    /// </summary>
     [ApiController]
     [ServiceFilter(typeof(ModelStateValidationFilter))]
     [Route("api/showtimes")]
@@ -17,6 +20,13 @@ namespace CinemaManagement.Controllers
         private readonly IShowTimeRepository _showTimeRepository;
         private readonly IMapper _mapper;
 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShowTimeController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger instance.</param>
+        /// <param name="showTimeRepository">The show time repository.</param>
+        /// <param name="mapper">The mapper instance.</param>
         public ShowTimeController(ILogger<Movie> logger, IShowTimeRepository showTimeRepository, IMapper mapper)
         {
             _logger = logger;
@@ -24,6 +34,12 @@ namespace CinemaManagement.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Adds a new show time to selected theater.
+        /// If show time already exists for the selected theater, it will return bad request 400.
+        /// </summary>
+        /// <param name="showTimeModel">The show time model to add.</param>
+        /// <returns>http 201 createdConent ShowTIme</returns>
         [HttpPost]
         public async Task<IActionResult> AddShowTime([FromBody] ShowTimeCreateDto showTimeModel)
         {
@@ -73,6 +89,11 @@ namespace CinemaManagement.Controllers
 
 
         //[Route("GetShowTime")]
+        /// <summary>
+        /// Retrieves a show time by its ID.
+        /// </summary>
+        /// <param name="showTimeId">The ID of the show time to retrieve.</param>
+        /// <returns>Http 200 Ok The show time with the specified ID.</returns>
         [HttpGet("getShowTime/{showTimeId}", Name = "GetShowTime")]
         public async Task<ActionResult<ShowTimeDto>> GetShowTime(int showTimeId)
         {
@@ -85,7 +106,11 @@ namespace CinemaManagement.Controllers
             return Ok(_mapper.Map<ShowTimeDto>(showTime));
         }
 
-        //[Route("GetShowTimesByMovie")]
+        /// <summary>
+        /// Retrieves show times by movie name.
+        /// </summary>
+        /// <param name="movieName">The name of the movie.</param>
+        /// <returns>Http 200 ok The show times for the specified movie.</returns>
         [HttpGet("getShowTimesByMovie/{movieName}", Name = "GetShowTimesByMovie")]
         public async Task<ActionResult<IEnumerable<ShowTimeDto>>> GetShowTimesByMovie(string movieName)
         {
@@ -98,6 +123,11 @@ namespace CinemaManagement.Controllers
 
         }
 
+        /// <summary>
+        /// Retrieves show times by movie ID.
+        /// </summary>
+        /// <param name="movieId">The ID of the movie.</param>
+        /// <returns>Http 200 Ok The show times for the specified movie.</returns>
         [HttpGet("getShowTimesByMovieID/{movieId}", Name = "getShowTimesByMovieID")]
         public async Task<ActionResult<IEnumerable<ShowTimeDto>>> GetShowTimesByMovieID(int movieId)
         {
@@ -111,6 +141,11 @@ namespace CinemaManagement.Controllers
 
         // update showtime -- update or delete is suffice
 
+        /// <summary>
+        /// Deletes a show time by its ID.
+        /// </summary>
+        /// <param name="showTimeId">The ID of the show time to delete.</param>
+        /// <returns>Http 204 NoContent</returns>
         [HttpDelete("delete/{showTimeId}")]
         public async Task<IActionResult> DeleteShowTime(int showTimeId)
         {

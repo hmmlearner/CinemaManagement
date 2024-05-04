@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaManagement.Controllers
 {
+
+    /// <summary>
+    /// Controller for managing bookings.
+    /// </summary>
     [ApiController]
     [ServiceFilter(typeof(ModelStateValidationFilter))]
     [Route("api/bookings")]
@@ -20,6 +24,13 @@ namespace CinemaManagement.Controllers
         private readonly IShowTimeRepository _showTimeRepository;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BookingController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="bookingRepository">The booking repository.</param>
+        /// <param name="showTimeRepository">The showtime repository.</param>
+        /// <param name="mapper">The mapper.</param>
         public BookingController(ILogger<Booking> logger, IBookingRepository bookingRepository, IShowTimeRepository showTimeRepository, IMapper mapper)
         {
             _logger = logger;
@@ -28,8 +39,11 @@ namespace CinemaManagement.Controllers
             _mapper = mapper;
         }
 
-
-
+        /// <summary>
+        /// Adds a new booking after checking if the booking is valid.
+        /// </summary>
+        /// <param name="bookingModel">The booking model.</param>
+        /// <returns>Http 201 ContentCreated - new booking.</returns>
         [HttpPost]
         public async Task<IActionResult> AddBooking([FromBody] BookingCreateDto bookingModel)
         {
@@ -80,14 +94,20 @@ namespace CinemaManagement.Controllers
 
         }
 
+        /// <summary>
+        /// Checks the validity of a booking by checking if the showtime is valid and the seats are available.
+        /// </summary>
+        /// <param name="booking">The booking.</param>
+        /// <param name="seats">The seats.</param>
+        /// <returns>A tuple indicating if the booking is valid and the validated booking.</returns>
         private async Task<(bool IsValid, Booking ValidatedBooking)> CheckBookingValidity(Booking booking, List<Seat> seats)
         {
             var showTime = await _showTimeRepository.GetShowTimeAsync(booking.ShowtimeId);
-            
+
             //check if the showtime is valid and the theater is not full
             if (showTime == null || showTime.ReservedSeats >= showTime.Theater.TotalSeats)
             {
-                return (false, null); 
+                return (false, null);
             }
             // check if the seats are available
             var seatsAvailable = await _bookingRepository.CheckIfSeatsAreAvailable(seats, booking.ShowtimeId);
@@ -100,7 +120,11 @@ namespace CinemaManagement.Controllers
             return (true, booking);
         }
 
-
+        /// <summary>
+        /// Gets a booking by ID.
+        /// </summary>
+        /// <param name="bookingId">The booking ID.</param>
+        /// <returns>Http 200 Ok - booking.</returns>
         [HttpGet("getBooking/{bookingId}", Name = "GetBooking")]
         public async Task<ActionResult<BookingDto>> GetBooking(int bookingId)
         {
@@ -117,10 +141,14 @@ namespace CinemaManagement.Controllers
             return Ok(bookingDTO);
         }
 
-
+        /// <summary>
+        /// Confirms a booking by checking if the booking was created within 15 minutes.
+        /// </summary>
+        /// <param name="bookingId">The booking ID.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="email">The email.</param>
+        /// <returns>Http 200 OK - The result of the confirmation.</returns>
         [HttpPost("confirmBooking/{bookingId}")]
-
-        //need to return BookingConfirmationDTO with booking details, including the movie, showtime, seats reserved, and total price
         public async Task<IActionResult> ConfirmBooking(int bookingId, string username, string email)
         {
             var booking = await _bookingRepository.GetBookingAsync(bookingId);
@@ -133,7 +161,7 @@ namespace CinemaManagement.Controllers
             {
                 return BadRequest("Booking has expired. Please book again");
             }
-            //TODO: neeed to email format using regex?
+            //TODO:Need to check if the email is valid use regex and send confirmation email to the user.
 
             using (var transaction = _bookingRepository.BeginTransaction())
             {
@@ -152,7 +180,7 @@ namespace CinemaManagement.Controllers
 
                     //TODO: Also need to update IsAvailable to false in the seats table
 
-                    
+
                     _bookingRepository.CommitTransaction();
                 }
                 catch (Exception ex)
@@ -166,6 +194,11 @@ namespace CinemaManagement.Controllers
             // i think we need to return AcceptedAtAction statuscode 202 but then a new resource is not really created?? so it fair to return 202?  
         }
 
+        /// <summary>
+        /// Gets the confirmation details of a booking.
+        /// </summary>
+        /// <param name="bookingId">The booking ID.</param>
+        /// <returns>Http 200 Ok with booking confirmation details.</returns>
         [HttpGet("BookingConfirmation/{bookingId}")]
         public async Task<ActionResult<BookingConfirmationDto>> BookingConfirmation(int bookingId)
         {
@@ -173,7 +206,7 @@ namespace CinemaManagement.Controllers
             if (booking == null)
             {
                 return NotFound();
-            }   
+            }
             var bookingDto = _mapper.Map<BookingConfirmationDto>(booking);
             var bookedSeats = await _bookingRepository.GetSeatsForBookingAsync(bookingId);
             var seatsDto = _mapper.Map<List<SeatDto>>(bookedSeats);
@@ -182,14 +215,23 @@ namespace CinemaManagement.Controllers
 
         }
 
+        /// <summary>
+        /// Gets the unavailable seats for a showtime.
+        /// </summary>
+        /// <param name="showTimeId">The showtime ID.</param>
+        /// <returns>Http 200 OK unavailable seats dataset.</returns>
         [HttpGet("GetUnavailableSeatsForShowTime/{showTimeId}")]
         public async Task<ActionResult<IEnumerable<SeatDto>>> GetUnavailableSeatsForShowTime(int showTimeId)
         {
-            var unavaliableSeats =  await _bookingRepository.GetNonAvailableSeatsForShowTimeAsync(showTimeId);
+            var unavaliableSeats = await _bookingRepository.GetNonAvailableSeatsForShowTimeAsync(showTimeId);
             var seatsDTO = _mapper.Map<List<SeatDto>>(unavaliableSeats);
             return Ok(seatsDTO);
         }
 
+        /// <summary>
+        /// Deletes expired bookings.
+        /// </summary>
+        /// <returns>http 200 Ok The result of the deletion.</returns>
         [HttpDelete("deleteOldBookings")]
         public async Task<IActionResult> DeleteOldBookings()
         {
